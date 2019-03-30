@@ -11,32 +11,40 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/profile','AccountController@index')->name('account');
-Route::put('/profile','AccountController@save');
-Route::get('/change-password','AccountController@changePassword')->name('account.changepassword');
-Route::put('/change-password','AccountController@updatePassword');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
+    Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
+    Route::get('contact-us','ContactController@index')->name('contact-us');
+    Route::post('contact-us','ContactController@save');    
+});
 
-Route::get('admin/home','AdminController@index')->name('admin.home');
-Route::get('admin','Admin\LoginController@showLoginForm')->name('admin.login');
-Route::post('admin', 'Admin\LoginController@login');
-Route::post('admin/password/email','Admin\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
-Route::get('admin/password/reset','Admin\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
-Route::post('admin/password/reset','Admin\ResetPasswordController@reset')->name('admin.password.update');
-Route::get('admin/password/reset/{token}','Admin\ResetPasswordController@showResetForm')->name('admin.password.reset');
-Route::get('admin/register','Admin\RegisterController@showRegistrationForm')->name('admin.register');
-Route::post('admin/register','Admin\RegisterController@register');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/profile','AccountController@index')->name('account');
+    Route::put('/profile','AccountController@save');
+    Route::get('/change-password','AccountController@changePassword')->name('account.changepassword');
+    Route::put('/change-password','AccountController@updatePassword');    
+});
 
-Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
-Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::prefix(config('app.admin_dir'))->middleware(['guest:admin'])->group(function () {
+    Route::get('/','Admin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('/', 'Admin\LoginController@login');
+    Route::post('password/email','Admin\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
+    Route::get('password/reset','Admin\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
+    Route::post('password/reset','Admin\ResetPasswordController@reset')->name('admin.password.update');
+    Route::get('password/reset/{token}','Admin\ResetPasswordController@showResetForm')->name('admin.password.reset');    
+    Route::get('register','Admin\RegisterController@showRegistrationForm')->name('admin.register');
+    Route::post('register','Admin\RegisterController@register');
+});
 
-Route::get('contact-us','ContactController@index')->name('contact-us');
-Route::post('contact-us','ContactController@save');
+Route::prefix(config('app.admin_dir'))->middleware(['auth:admin'])->group(function () {
+    Route::get('home','Admin\AdminController@index')->name('admin.home');
+    Route::get('settings','Admin\SettingController@index')->name('admin.settings');
+    Route::post('settings','Admin\SettingController@storeGeneralSettings')->name('admin.settings.general');
+});
 
-Route::resource('tests', 'TestController');
