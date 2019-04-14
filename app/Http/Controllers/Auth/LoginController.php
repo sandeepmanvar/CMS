@@ -129,7 +129,8 @@ class LoginController extends Controller
                 $user = User::create([
                     'name' => $providerUser->getName(),
                     'email' => $providerUser->getEmail(),
-                    'password' => Hash::make(Str::random(10))
+                    //'password' => Hash::make(Str::random(10))
+                    'password' => Hash::make('123456')
                 ]);
             } 
 

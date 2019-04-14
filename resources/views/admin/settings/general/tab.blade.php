@@ -11,7 +11,4 @@
     <li class="nav-item">
         <a class="nav-link" id="security-tab" data-toggle="tab" href="#security" role="tab" aria-controls="security" aria-selected="false">{{ __('Security') }}</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other" aria-selected="false">{{ __('Other') }}</a>
-    </li>
 </ul>

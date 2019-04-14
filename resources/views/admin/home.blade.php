@@ -2,6 +2,15 @@
 
 @section('title', __('Dashboard'))
 
+@section('page-specific-scripts-bottom')
+  <!-- Page level plugins -->
+  <script src="{{ asset('assets/admin') }}/vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{ asset('assets/admin') }}/js/demo/chart-area-demo.js"></script>
+  <script src="{{ asset('assets/admin') }}/js/demo/chart-pie-demo.js"></script>
+@endsection
+
 @section('content')
 
 <!-- Begin Page Content -->

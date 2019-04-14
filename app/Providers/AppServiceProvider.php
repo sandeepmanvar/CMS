@@ -30,9 +30,22 @@ class AppServiceProvider extends ServiceProvider
             })
             ->toArray()
         ]);
-        
+
         config(['app.name' => config('settings.general.company_name')]);
-        config(['app.url' => config('settings.general.domain')]);
+        config(['mail.driver' => config('settings.mail.mailtype')]);
+        config(['mail.host' => config('settings.mail.smtp_host')]);
+        config(['mail.port' => config('settings.mail.smtp_port')]);
+        config(['mail.encryption' => config('settings.mail.smtp_ssl_type')]);
+        config(['mail.username' => config('settings.mail.smtp_username')]);
+        config(['mail.password' => config('settings.mail.smtp_password')]);
+        config(['mail.from.address' => config('settings.mail.from_email') == "" ? config('settings.general.email_address') : config('settings.mail.from_email')]);
+        config(['mail.from.name' => config('settings.mail.from_name') == "" ? config('settings.general.company_name') : config('settings.mail.from_name')]);
+        config(['captcha.siteKey' => config('settings.security.recaptcha_sitekey')]);
+        config(['captcha.secretKey' => config('settings.security.recaptcha_secretkey')]);
+        config(['captcha.options.hideBadge' => config('settings.security.hide_invisible_captcha_badge')]);
+        config(['captcha.options.dataBadge' => config('settings.security.invisible_recaptcha_badge_style')]);
+
+        //dd(config('services'));
     }
 
     /**

@@ -18,7 +18,7 @@ Route::middleware(['guest'])->group(function () {
         return view('welcome');
     });
     Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
-    Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
+    Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback')->name('login.service.callback');
     Route::get('contact-us','ContactController@index')->name('contact-us');
     Route::post('contact-us','ContactController@save');    
 });
@@ -45,6 +45,8 @@ Route::prefix(config('app.admin_dir'))->middleware(['guest:admin'])->group(funct
 Route::prefix(config('app.admin_dir'))->middleware(['auth:admin'])->group(function () {
     Route::get('home','Admin\AdminController@index')->name('admin.home');
     Route::get('settings','Admin\SettingController@index')->name('admin.settings');
-    Route::post('settings','Admin\SettingController@storeGeneralSettings')->name('admin.settings.general');
+    Route::post('settings','Admin\SettingController@storeGeneralSettings')->name('admin.settings');
+    Route::get('settings/signin','Admin\SettingController@signin')->name('admin.settings.signin');
+    Route::post('settings/signin','Admin\SettingController@storeSigninIntegrations')->name('admin.settings.signin');
 });
 

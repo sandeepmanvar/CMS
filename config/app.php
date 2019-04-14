@@ -236,8 +236,6 @@ return [
     |
     */
 
-    'email' => env('APP_EMAIL','admin@yoursite.com'),
-
     'admin_dir' => env('APP_ADMIN_DIR','admin'),
 
 ];
