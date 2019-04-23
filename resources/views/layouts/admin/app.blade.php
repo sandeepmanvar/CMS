@@ -70,8 +70,7 @@
   <script src="{{ asset('assets/admin') }}/js/sb-admin-2.min.js"></script>
 
   <!-- Page Specific Scripts -->
-  @section('page-specific-scripts-bottom')
-  @show
+  @stack('scripts-b')
 
 </body>
 

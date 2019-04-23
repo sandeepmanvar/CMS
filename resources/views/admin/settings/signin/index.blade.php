@@ -130,7 +130,7 @@
 
 @endsection
 
-@section('page-specific-scripts-bottom')
+@push('scripts-b')
 
 <script>
 $(function() {
@@ -152,4 +152,4 @@ $(function() {
 });    
 </script>
 
-@endsection
+@endpush

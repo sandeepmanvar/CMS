@@ -177,14 +177,14 @@
     </div>
 </form>
 
-@section('page-specific-scripts-bottom')
+@push('scripts-b')
 
 <script>
-    $(function(){
-        $('.captcha_type').click(function() {
-            $(".invisible-reCAPTCHA_div").toggleClass('d-none');
-        });
+$(function(){
+    $('.captcha_type').click(function() {
+        $(".invisible-reCAPTCHA_div").toggleClass('d-none');
     });
-</script>    
+});
+</script>
 
-@endsection
+@endpush

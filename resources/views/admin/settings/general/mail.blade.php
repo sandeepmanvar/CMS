@@ -137,14 +137,14 @@
     </div>
 </form>
 
-@section('page-specific-scripts-bottom')
+@push('scripts-b')
 
 <script>
-    $(function(){
-        $('#mailtype').change(function() {
-            $(".smtp_div").toggleClass('d-none');
-        });
+$(function(){
+    $('#mailtype').change(function() {
+        $(".smtp_div").toggleClass('d-none');
     });
+});
 </script>    
 
-@endsection
+@endpush

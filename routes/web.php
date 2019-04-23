@@ -48,5 +48,9 @@ Route::prefix(config('app.admin_dir'))->middleware(['auth:admin'])->group(functi
     Route::post('settings','Admin\SettingController@storeGeneralSettings')->name('admin.settings');
     Route::get('settings/signin','Admin\SettingController@signin')->name('admin.settings.signin');
     Route::post('settings/signin','Admin\SettingController@storeSigninIntegrations')->name('admin.settings.signin');
+    Route::get('profile','Admin\AdminController@profile')->name('admin.profile');
+    Route::post('profile','Admin\AdminController@updateProfile');
+    Route::get('profile/change-password','Admin\AdminController@changePassword')->name('admin.change_password');
+    Route::post('profile/change-password','Admin\AdminController@updatePassword')->name('admin.change_password');
 });
 
