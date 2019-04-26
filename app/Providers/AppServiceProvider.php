@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         config(['captcha.secretKey' => config('settings.security.recaptcha_secretkey')]);
         config(['captcha.options.hideBadge' => config('settings.security.hide_invisible_captcha_badge')]);
         config(['captcha.options.dataBadge' => config('settings.security.invisible_recaptcha_badge_style')]);
-
+        
         //dd(config('services'));
     }
 

@@ -12,7 +12,7 @@ class CheckForMaintenanceMode extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        
     ];
 
     /**
@@ -23,7 +23,7 @@ class CheckForMaintenanceMode extends Middleware
      */
     protected function inExceptArray($request)
     {
-        $this->except[] = config('app.admin_dir').'/*';
+        $this->except= [config('app.admin_dir'), config('app.admin_dir').'/*', 'logout'];
         foreach ($this->except as $except) {
             if ($except !== '/') {
                 $except = trim($except, '/');

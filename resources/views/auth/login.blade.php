@@ -73,7 +73,8 @@
                                 @endif
                             </div>
                         </div>
-                        @captcha
+                        {{-- @captcha --}}
+                        {!! app('captcha')->render() !!}
                     </form>
                     <hr>
                     <div class="text-center">
