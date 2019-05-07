@@ -42,10 +42,10 @@ class AppServiceProvider extends ServiceProvider
         config(['mail.from.name' => config('settings.mail.from_name') == "" ? config('settings.general.company_name') : config('settings.mail.from_name')]);
         config(['captcha.siteKey' => config('settings.security.recaptcha_sitekey')]);
         config(['captcha.secretKey' => config('settings.security.recaptcha_secretkey')]);
-        config(['captcha.options.hideBadge' => config('settings.security.hide_invisible_captcha_badge')]);
+        config(['captcha.options.hideBadge' => config('settings.security.hide_invisible_captcha_badge') == 'N' ? false : true]);
         config(['captcha.options.dataBadge' => config('settings.security.invisible_recaptcha_badge_style')]);
         
-        //dd(config('services'));
+        //dd(config('captcha'));
     }
 
     /**

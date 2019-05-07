@@ -39,6 +39,9 @@ class ForgotPasswordController extends Controller
      */
     public function showLinkRequestForm()
     {
+        if(config('settings.security.disable_admin_pw_reset') == 'Y'){
+            abort(403);
+        }
         return view('admin.passwords.email');
     }
 
@@ -50,6 +53,10 @@ class ForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(Request $request)
     {
+        if(config('settings.security.disable_admin_pw_reset') == 'Y'){
+            abort(403);
+        }
+        
         $this->validateEmail($request);
 
         // We will send the password reset link to this user. Once we have attempted

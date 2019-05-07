@@ -40,87 +40,91 @@
         </div>
     </div>
 
-    <div class="form-group row">
-        <label for="captcha_type" class="col-sm-2 col-form-label">{{ __('Captcha Type') }}</label>
-        <div class="col-sm-10">
-            <div class="custom-control custom-control-inline custom-radio">
-                <input type="radio" id="captcha_type_default" name="captcha_type" value="default" class="captcha_type custom-control-input{{ $errors->has('captcha_type') ? ' is-invalid' : '' }}" {{ old('captcha_type', config('settings.security.captcha_type')) == 'default' ? 'checked' : '' }}>
-                <label class="custom-control-label" for="captcha_type_default">Default</label>
-            </div>
+    <div id="enable_captcha_form_div" class="{{ old('captcha_type',config('settings.security.enable_captcha_form')) == 'N' ? 'd-none' : '' }}">
 
-            <div class="custom-control custom-control-inline custom-radio">
-                <input type="radio" id="captcha_type_invisible_recaptcha" name="captcha_type" value="invisible_recaptcha" class="captcha_type custom-control-input{{ $errors->has('captcha_type') ? ' is-invalid' : '' }}" {{ old('captcha_type', config('settings.security.captcha_type')) == 'invisible_recaptcha' ? 'checked' : '' }}>
-                <label class="custom-control-label" for="captcha_type_invisible_recaptcha">Invisible reCAPTCHA</label>
-                @if ($errors->has('captcha_type'))
+        <div class="form-group row">
+            <label for="captcha_type" class="col-sm-2 col-form-label">{{ __('Captcha Type') }}</label>
+            <div class="col-sm-10">
+                <div class="custom-control custom-control-inline custom-radio">
+                    <input type="radio" id="captcha_type_default" name="captcha_type" value="default" class="captcha_type custom-control-input{{ $errors->has('captcha_type') ? ' is-invalid' : '' }}" {{ old('captcha_type', config('settings.security.captcha_type')) == 'default' ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="captcha_type_default">Default</label>
+                </div>
+
+                <div class="custom-control custom-control-inline custom-radio">
+                    <input type="radio" id="captcha_type_invisible_recaptcha" name="captcha_type" value="invisible_recaptcha" class="captcha_type custom-control-input{{ $errors->has('captcha_type') ? ' is-invalid' : '' }}" {{ old('captcha_type', config('settings.security.captcha_type')) == 'invisible_recaptcha' ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="captcha_type_invisible_recaptcha">Invisible reCAPTCHA</label>
+                    @if ($errors->has('captcha_type'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('captcha_type') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row invisible-reCAPTCHA_div {{ old('captcha_type',config('settings.security.captcha_type')) == 'default' ? 'd-none' : '' }}">
+            <label for="recaptcha_sitekey" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Site Key') }}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control{{ $errors->has('recaptcha_sitekey') ? ' is-invalid' : '' }}" id="recaptcha_sitekey" name="recaptcha_sitekey" value="{{ old('recaptcha_sitekey', config('settings.security.recaptcha_sitekey')) }}">
+                <small id="recaptcha_sitekey_help" class="form-text text-muted">
+                    {{ __('You need to register for reCAPTCHA @ ') }} <a href="https://www.google.com/recaptcha/admin" target="_blank">https://www.google.com/recaptcha/admin</a>
+                </small>
+                @if ($errors->has('recaptcha_sitekey'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('captcha_type') }}</strong>
+                        <strong>{{ $errors->first('recaptcha_sitekey') }}</strong>
                     </span>
-                @endif
+                @endif                                              
             </div>
         </div>
-    </div>
 
-    <div class="form-group row invisible-reCAPTCHA_div {{ config('settings.security.captcha_type') == 'default' ? 'd-none' : '' }}">
-        <label for="recaptcha_sitekey" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Site Key') }}</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control{{ $errors->has('recaptcha_sitekey') ? ' is-invalid' : '' }}" id="recaptcha_sitekey" name="recaptcha_sitekey" value="{{ old('recaptcha_sitekey', config('settings.security.recaptcha_sitekey')) }}">
-            <small id="recaptcha_sitekey_help" class="form-text text-muted">
-                {{ __('You need to register for reCAPTCHA @ ') }} <a href="https://www.google.com/recaptcha/admin" target="_blank">https://www.google.com/recaptcha/admin</a>
-            </small>
-            @if ($errors->has('recaptcha_sitekey'))
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $errors->first('recaptcha_sitekey') }}</strong>
-                </span>
-            @endif                                              
-        </div>
-    </div>
-
-    <div class="form-group row invisible-reCAPTCHA_div {{ config('settings.security.captcha_type') == 'default' ? 'd-none' : '' }}">
-        <label for="recaptcha_secretkey" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Secret Key') }}</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control{{ $errors->has('recaptcha_secretkey') ? ' is-invalid' : '' }}" id="recaptcha_secretkey" name="recaptcha_secretkey" value="{{ old('recaptcha_secretkey', config('settings.security.recaptcha_secretkey')) }}">
-            @if ($errors->has('recaptcha_secretkey'))
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $errors->first('recaptcha_secretkey') }}</strong>
-                </span>
-            @endif                                              
-        </div>
-    </div>
-
-    <div class="form-group row invisible-reCAPTCHA_div {{ config('settings.security.captcha_type') == 'default' ? 'd-none' : '' }}">
-        <label for="hide_invisible_captcha_badge" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Badge') }}</label>
-        <div class="col-sm-10">
-            <div class="custom-control custom-control-inline custom-radio">
-                <input type="radio" id="hide_invisible_captcha_badge_yes" name="hide_invisible_captcha_badge" value="Y" class="custom-control-input{{ $errors->has('hide_invisible_captcha_badge') ? ' is-invalid' : '' }}" {{ old('hide_invisible_captcha_badge', config('settings.security.hide_invisible_captcha_badge')) == 'Y' ? 'checked' : '' }}>
-                <label class="custom-control-label" for="hide_invisible_captcha_badge_yes">Yes</label>
-            </div>
-
-            <div class="custom-control custom-control-inline custom-radio">
-                <input type="radio" id="hide_invisible_captcha_badge_no" name="hide_invisible_captcha_badge" value="N" class="custom-control-input{{ $errors->has('hide_invisible_captcha_badge') ? ' is-invalid' : '' }}" {{ old('hide_invisible_captcha_badge', config('settings.security.hide_invisible_captcha_badge')) == 'N' ? 'checked' : '' }}>
-                <label class="custom-control-label" for="hide_invisible_captcha_badge_no">No</label>
-                @if ($errors->has('hide_invisible_captcha_badge'))
+        <div class="form-group row invisible-reCAPTCHA_div {{ old('captcha_type',config('settings.security.captcha_type')) == 'default' ? 'd-none' : '' }}">
+            <label for="recaptcha_secretkey" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Secret Key') }}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control{{ $errors->has('recaptcha_secretkey') ? ' is-invalid' : '' }}" id="recaptcha_secretkey" name="recaptcha_secretkey" value="{{ old('recaptcha_secretkey', config('settings.security.recaptcha_secretkey')) }}">
+                @if ($errors->has('recaptcha_secretkey'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>&nbsp;{{ $errors->first('hide_invisible_captcha_badge') }}</strong>
+                        <strong>{{ $errors->first('recaptcha_secretkey') }}</strong>
                     </span>
-                @endif
+                @endif                                              
             </div>
         </div>
-    </div>
 
-    <div class="form-group row invisible-reCAPTCHA_div {{ config('settings.security.captcha_type') == 'default' ? 'd-none' : '' }}">
-        <label for="invisible_recaptcha_badge_style" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Badge Style') }}</label>
-        <div class="col-sm-10">
-            <select id="invisible_recaptcha_badge_style" name="invisible_recaptcha_badge_style" class="form-control{{ $errors->has('invisible_recaptcha_badge_style') ? ' is-invalid' : '' }}">
-                <option value="bottomright" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "bottomright" ? 'selected' : '' }}>Bottom Right</option>
-                <option value="bottomleft" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "bottomleft" ? 'selected' : '' }}>Bottom Left</option>
-                <option value="inline" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "inline" ? 'selected' : '' }}>Inline</option>
-            </select>
-            @if ($errors->has('invisible_recaptcha_badge_style'))
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $errors->first('invisible_recaptcha_badge_style') }}</strong>
-                </span>
-            @endif                                              
+        <div class="form-group row invisible-reCAPTCHA_div {{ old('captcha_type',config('settings.security.captcha_type')) == 'default' ? 'd-none' : '' }}">
+            <label for="hide_invisible_captcha_badge" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Badge') }}</label>
+            <div class="col-sm-10">
+                <div class="custom-control custom-control-inline custom-radio">
+                    <input type="radio" id="hide_invisible_captcha_badge_yes" name="hide_invisible_captcha_badge" value="N" class="custom-control-input{{ $errors->has('hide_invisible_captcha_badge') ? ' is-invalid' : '' }}" {{ old('hide_invisible_captcha_badge', config('settings.security.hide_invisible_captcha_badge')) == 'N' ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="hide_invisible_captcha_badge_yes">Yes</label>
+                </div>
+
+                <div class="custom-control custom-control-inline custom-radio">
+                    <input type="radio" id="hide_invisible_captcha_badge_no" name="hide_invisible_captcha_badge" value="Y" class="custom-control-input{{ $errors->has('hide_invisible_captcha_badge') ? ' is-invalid' : '' }}" {{ old('hide_invisible_captcha_badge', config('settings.security.hide_invisible_captcha_badge')) == 'Y' ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="hide_invisible_captcha_badge_no">No</label>
+                    @if ($errors->has('hide_invisible_captcha_badge'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>&nbsp;{{ $errors->first('hide_invisible_captcha_badge') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div>
         </div>
+
+        <div class="form-group row invisible-reCAPTCHA_div {{ old('captcha_type',config('settings.security.captcha_type')) == 'default' ? 'd-none' : '' }}">
+            <label for="invisible_recaptcha_badge_style" class="col-sm-2 col-form-label">{{ __('Invisible reCAPTCHA Badge Style') }}</label>
+            <div class="col-sm-10">
+                <select id="invisible_recaptcha_badge_style" name="invisible_recaptcha_badge_style" class="form-control{{ $errors->has('invisible_recaptcha_badge_style') ? ' is-invalid' : '' }}">
+                    <option value="bottomright" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "bottomright" ? 'selected' : '' }}>Bottom Right</option>
+                    <option value="bottomleft" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "bottomleft" ? 'selected' : '' }}>Bottom Left</option>
+                    <option value="inline" {{ old('invisible_recaptcha_badge_style', config('settings.security.invisible_recaptcha_badge_style')) == "inline" ? 'selected' : '' }}>Inline</option>
+                </select>
+                @if ($errors->has('invisible_recaptcha_badge_style'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('invisible_recaptcha_badge_style') }}</strong>
+                    </span>
+                @endif                                              
+            </div>
+        </div>
+
     </div>
 
     <div class="form-group row">
@@ -182,7 +186,19 @@
 <script>
 $(function(){
     $('.captcha_type').click(function() {
-        $(".invisible-reCAPTCHA_div").toggleClass('d-none');
+        if(this.value == 'default'){
+            $(".invisible-reCAPTCHA_div").addClass('d-none');
+        } else {
+            $(".invisible-reCAPTCHA_div").removeClass('d-none');
+        }
+    });
+
+    $('#enable_captcha_form').on('click', function(){
+        if($(this).prop("checked") == true){
+            $('#enable_captcha_form_div').removeClass('d-none');
+        } else if($(this).prop("checked") == false){
+            $('#enable_captcha_form_div').addClass('d-none');
+        }
     });
 });
 </script>

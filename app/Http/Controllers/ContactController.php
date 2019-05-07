@@ -45,13 +45,21 @@ class ContactController extends Controller
     
     public function validation($request)
     {
-        return $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string|max:20',
             'email' => 'required|email|max:100',
             'subject' => 'required|string|max:40',
-            'message' => 'required|string|max:255',
-            'g-recaptcha-response' => 'required|captcha'
-        ]);
+            'message' => 'required|string|max:255'
+        ];
+
+        if(config('settings.security.enable_captcha_form') == 'Y') {
+            if(config('settings.security.captcha_type') == 'invisible_recaptcha'){
+                $rules+=['g-recaptcha-response' => 'required|recaptcha'];
+            } else {
+                $rules+=['captcha' => 'required|captcha'];
+            }
+        }
+        return $validatedData = $request->validate($rules);
     }
 
 }

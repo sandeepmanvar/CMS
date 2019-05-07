@@ -38,17 +38,6 @@
                             </div>
                         </div>
 
-                        @if ($errors->has('g-recaptcha-response'))
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <input type="hidden" class="form-control is-invalid">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                </span>
-                            </div>
-                        </div>
-                        @endif
-
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
@@ -59,6 +48,39 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if (config('settings.security.enable_captcha_form') == 'Y')
+                            @if (config('settings.security.captcha_type') == 'invisible_recaptcha')
+                                @recaptcha    
+
+                                @if ($errors->has('g-recaptcha-response'))
+                                <div class="form-group row">
+                                    <div class="col-md-6 offset-md-4">
+                                        <input type="hidden" class="form-control is-invalid">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                @endif
+                            @else
+                            <div class="form-group row">
+                                <div class="col-md-3 offset-md-4">
+                                    {{ captcha_img('math') }}
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="captcha" type="text" class="form-control{{ $errors->has('captcha') ? ' is-invalid' : '' }}" name="captcha" required>
+                                    @if ($errors->has('captcha'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('captcha') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif 
+                        @endif
+
+                        
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
@@ -73,8 +95,7 @@
                                 @endif
                             </div>
                         </div>
-                        {{-- @captcha --}}
-                        {!! app('captcha')->render() !!}
+                        
                     </form>
                     <hr>
                     <div class="text-center">

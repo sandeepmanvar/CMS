@@ -54,7 +54,7 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         //return $request->only($this->username(), 'password');
-        return ['email'=>$request->{$this->username()},'password'=>$request->password,'status'=>1];
+        return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
     }
 
     /**
@@ -67,11 +67,22 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        $request->validate([
+        $rules = [];
+
+        $rules += [
             $this->username() => 'required|string',
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required|captcha'
-        ]);
+        ];
+
+        if (config('settings.security.enable_captcha_form') == 'Y') {
+            if (config('settings.security.captcha_type') == 'invisible_recaptcha') {
+                $rules += ['g-recaptcha-response' => 'required|recaptcha'];
+            } else {
+                $rules += ['captcha' => 'required|captcha'];
+            }
+        }
+
+        $request->validate($rules);
     }
 
     /**
@@ -96,7 +107,7 @@ class LoginController extends Controller
         } else {
             $providerUser = Socialite::driver($service)->user();
         }
-    
+
         $authUser = $this->findOrCreateUser($providerUser, $service);
 
         Auth::login($authUser);
@@ -106,11 +117,11 @@ class LoginController extends Controller
 
     public function findOrCreateUser($providerUser, $service)
     {
-        $account = SocialAccount::where('provider_user_id',$providerUser->getId())
-            ->where('provider',$service)
+        $account = SocialAccount::where('provider_user_id', $providerUser->getId())
+            ->where('provider', $service)
             ->first();
 
-        if($account) {
+        if ($account) {
             return $account->user;
         } else {
             $account = new SocialAccount([
@@ -124,20 +135,28 @@ class LoginController extends Controller
             ]);
 
             $user = User::where('email', $providerUser->getEmail())->first();
-            
-            if(!$user) {
+
+            if (!$user) {
                 $user = User::create([
                     'name' => $providerUser->getName(),
                     'email' => $providerUser->getEmail(),
-                    //'password' => Hash::make(Str::random(10))
-                    'password' => Hash::make('123456')
+                    'password' => Hash::make(Str::random(10))
                 ]);
-            } 
+            }
 
             $account->user()->associate($user);
             $account->save();
 
             return $user;
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect()->route('login');
     }
 }

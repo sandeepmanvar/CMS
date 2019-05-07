@@ -117,7 +117,15 @@ class LoginController extends Controller
      */
     public function maxAttempts()
     {
-        //return 'sandeep';
         return property_exists($this, 'maxAttempts') ? $this->maxAttempts : 5;
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect()->route('admin.login');
     }
 }

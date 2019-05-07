@@ -54,3 +54,6 @@ Route::prefix(config('app.admin_dir'))->middleware(['auth:admin'])->group(functi
     Route::post('profile/change-password','Admin\AdminController@updatePassword')->name('admin.change_password');
 });
 
+Route::prefix(config('app.admin_dir'))->group(function(){
+    Route::post('logout', 'Admin\LoginController@logout')->name('admin.logout');
+});

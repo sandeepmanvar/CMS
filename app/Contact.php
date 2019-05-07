@@ -11,5 +11,5 @@ class Contact extends Model
      *
      * @var array
      */
-    protected $guarded = ['g-recaptcha-response'];
+    protected $guarded = ['g-recaptcha-response', 'captcha'];
 }

@@ -32,7 +32,8 @@ class AccountController extends Controller
         return view('member.account', compact('user'));
     }
 
-    public function save(Request $request) {
+    public function save(Request $request)
+    {
         $userId = Auth::id();
         $this->validation($request);
         $user = User::find($userId);
@@ -40,20 +41,29 @@ class AccountController extends Controller
         $user->lastname = $request->lastname;
         $user->email = $request->email;
         $user->save();
-        return redirect('profile')->with('status','Your account details has been updated successfully');
+        return redirect('profile')->with('status', 'Your account details has been updated successfully');
     }
 
     public function validation($request)
     {
-        return $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string',
             'lastname' => 'required|string',
             'email' => [
                 'required', 'email',
                 Rule::unique('users')->ignore($request->user()->id),
-            ],
-            'g-recaptcha-response' => 'required|captcha'
-        ]);
+            ]
+        ];
+
+        if (config('settings.security.enable_captcha_form') == 'Y') {
+            if (config('settings.security.captcha_type') == 'invisible_recaptcha') {
+                $rules += ['g-recaptcha-response' => 'required|recaptcha'];
+            } else {
+                $rules += ['captcha' => 'required|captcha'];
+            }
+        }
+
+        return $validatedData = $request->validate($rules);
     }
 
     public function changePassword()
@@ -63,19 +73,30 @@ class AccountController extends Controller
         return view('member.change_password');
     }
 
-    public function updatePassword(Request $request) {
+    public function updatePassword(Request $request)
+    {
         $userId = Auth::id();
         $this->validatePassword($request);
         $user = User::find($userId);
         $user->password = Hash::make($request->password);
         $user->save();
-        return redirect('account.changepassword')->with('status','Your password has been changed successfully');
+        return redirect('account.changepassword')->with('status', 'Your password has been changed successfully');
     }
 
-    public function validatePassword($request) {
-        return $validatedData = $request->validate([
-            'password' => 'required|confirmed|min:6',
-            'g-recaptcha-response' => 'required|captcha'
-        ]);
+    public function validatePassword($request)
+    {
+        $rules = [
+            'password' => 'required|confirmed|min:6'
+        ];
+
+        if (config('settings.security.enable_captcha_form') == 'Y') {
+            if (config('settings.security.captcha_type') == 'invisible_recaptcha') {
+                $rules += ['g-recaptcha-response' => 'required|recaptcha'];
+            } else {
+                $rules += ['captcha' => 'required|captcha'];
+            }
+        }
+
+        return $validatedData = $request->validate($rules);
     }
 }
