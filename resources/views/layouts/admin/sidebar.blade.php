@@ -21,7 +21,9 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-    
+    <li class="nav-item active">
+        <a class="nav-link" href="{{ route('admin.members') }}"><i class="fas fa-fw fa-users"></i><span>{{ __('Members') }}</span></a>
+    </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>

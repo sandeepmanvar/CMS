@@ -52,6 +52,7 @@ Route::prefix(config('app.admin_dir'))->middleware(['auth:admin'])->group(functi
     Route::post('profile','Admin\AdminController@updateProfile');
     Route::get('profile/change-password','Admin\AdminController@changePassword')->name('admin.change_password');
     Route::post('profile/change-password','Admin\AdminController@updatePassword')->name('admin.change_password');
+    Route::get('/members','Admin\MemberController@index')->name('admin.members');
 });
 
 Route::prefix(config('app.admin_dir'))->group(function(){
